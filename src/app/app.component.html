@@ -1,0 +1,596 @@
+<h1>La roulette des jobs</h1>
+
+<div
+  style="margin-bottom:10px;text-align: center; display: flex;
+flex-direction: column;width: 600px; align-items: center; margin: auto;"
+>
+  <p-button
+    [ngClass]="button"
+    (onClick)="roulette()"
+    [disabled]="CheckRoulette()"
+    >Roulette des Jobs</p-button
+  >
+  <div style="margin : 5px 0px 5px 0px;display: flex; flex-direction: row">
+    <label style="margin-right : 5px" for="ilvlRequis">Ilvl Requis</label><br />
+    <input
+      style="margin-right : 5px"
+      id="ilvlRequis"
+      pInputText
+      [(ngModel)]="ilvlRequis"
+    />
+  </div>
+
+  <div style="margin : 5px 0px 5px 0px;display: flex; flex-direction: row">
+    <label style="margin-right : 5px">Preset Ilvl requis</label><br />
+    <p-dropdown
+      [ngClass]="customdropdown"
+      [options]="ivlsRequis"
+      [(ngModel)]="ilvlRequis"
+      optionLabel="label"
+      optionValue="valeur"
+      placeholder="Presets"
+      (ngModelChange)="LimitedJob = false"
+    ></p-dropdown>
+    <label style="margin-right : 5px">Jobs limités ?</label>
+    <p-checkbox
+      [(ngModel)]="LimitedJob"
+      [binary]="true"
+      inputId="binary"
+      (ngModelChange)="ilvlRequis = (ilvlRequis || 0) + ''"
+    ></p-checkbox>
+  </div>
+
+  <div style="margin : 5px 0px 5px 0px;display: flex; flex-direction: row">
+    <label style="margin-right : 5px">Tableau des Ilvls</label><br />
+    <p-button
+      class="pbilvl"
+      icon="pi pi-download"
+      label="Charger"
+      (onClick)="ChargerIlvlPlus()"
+    ></p-button>
+    <p-button
+      class="pbilvl"
+      icon="pi pi-upload"
+      label="Sauvegarder"
+      (onClick)="SauverIlvl()"
+    ></p-button>
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/paladin.png')"
+    [ngClass]="{
+      TankActif: selection == 1,
+      TankInactif: selection != 1,
+      Job: true,
+      JobDisable: ilvl[0] < ilvlRequis
+    }"
+  >
+    <p>Paladin</p>
+    <input pInputText [(ngModel)]="ilvl[0]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/warrior.png')"
+    [ngClass]="{
+      TankActif: selection == 2,
+      TankInactif: selection != 2,
+      Job: true,
+      JobDisable: ilvl[1] < ilvlRequis
+    }"
+  >
+    <p>Guerrier</p>
+    <input pInputText [(ngModel)]="ilvl[1]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/darkknight.png')"
+    [ngClass]="{
+      TankActif: selection == 3,
+      TankInactif: selection != 3,
+      Job: true,
+      JobDisable: ilvl[2] < ilvlRequis
+    }"
+  >
+    <p>Chevalier noir</p>
+    <input pInputText [(ngModel)]="ilvl[2]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/gunbreaker.png')"
+    [ngClass]="{
+      TankActif: selection == 4,
+      TankInactif: selection != 4,
+      Job: true,
+      JobDisable: ilvl[3] < ilvlRequis
+    }"
+  >
+    <p>Pistosabreur</p>
+    <input pInputText [(ngModel)]="ilvl[3]" />
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/whitemage.png')"
+    [ngClass]="{
+      HealActif: selection == 5,
+      HealInactif: selection != 5,
+      Job: true,
+      JobDisable: ilvl[4] < ilvlRequis
+    }"
+  >
+    <p>Mage blanc</p>
+    <input pInputText [(ngModel)]="ilvl[4]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/scholar.png')"
+    [ngClass]="{
+      HealActif: selection == 6,
+      HealInactif: selection != 6,
+      Job: true,
+      JobDisable: ilvl[5] < ilvlRequis
+    }"
+  >
+    <p>Érudit</p>
+    <input pInputText [(ngModel)]="ilvl[5]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/astrologian.png')"
+    [ngClass]="{
+      HealActif: selection == 7,
+      HealInactif: selection != 7,
+      Job: true,
+      JobDisable: ilvl[6] < ilvlRequis
+    }"
+  >
+    <p>Astromancien</p>
+    <input pInputText [(ngModel)]="ilvl[6]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/sage.png')"
+    [ngClass]="{
+      HealActif: selection == 8,
+      HealInactif: selection != 8,
+      Job: true,
+      JobDisable: ilvl[7] < ilvlRequis
+    }"
+  >
+    <p>Sage</p>
+    <input pInputText [(ngModel)]="ilvl[7]" />
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/monk.png')"
+    [ngClass]="{
+      DpsActif: selection == 9,
+      DpsInactif: selection != 9,
+      Job: true,
+      JobDisable: ilvl[8] < ilvlRequis
+    }"
+  >
+    <p>Moine</p>
+    <input pInputText [(ngModel)]="ilvl[8]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/dragoon.png')"
+    [ngClass]="{
+      DpsActif: selection == 10,
+      DpsInactif: selection != 10,
+      Job: true,
+      JobDisable: ilvl[9] < ilvlRequis
+    }"
+  >
+    <p>Chevalier dragon</p>
+    <input pInputText [(ngModel)]="ilvl[9]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/ninja.png')"
+    [ngClass]="{
+      DpsActif: selection == 11,
+      DpsInactif: selection != 11,
+      Job: true,
+      JobDisable: ilvl[10] < ilvlRequis
+    }"
+  >
+    <p>Ninja</p>
+    <input pInputText [(ngModel)]="ilvl[10]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/samurai.png')"
+    [ngClass]="{
+      DpsActif: selection == 12,
+      DpsInactif: selection != 12,
+      Job: true,
+      JobDisable: ilvl[11] < ilvlRequis
+    }"
+  >
+    <p>Samouraï</p>
+    <input pInputText [(ngModel)]="ilvl[11]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/reaper.png')"
+    [ngClass]="{
+      DpsActif: selection == 13,
+      DpsInactif: selection != 13,
+      Job: true,
+      JobDisable: ilvl[12] < ilvlRequis
+    }"
+  >
+    <p>Faucheur</p>
+    <input pInputText [(ngModel)]="ilvl[12]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_dps.png')"
+    [ngClass]="{
+      DpsActif: selection == 22,
+      DpsInactif: selection != 22,
+      Job: true,
+      JobDisable: ilvl[21] < ilvlRequis
+    }"
+  >
+    <p>Rôdeur vipère</p>
+    <input pInputText [(ngModel)]="ilvl[21]" />
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/bard.png')"
+    [ngClass]="{
+      DpsActif: selection == 14,
+      DpsInactif: selection != 14,
+      Job: true,
+      JobDisable: ilvl[13] < ilvlRequis
+    }"
+  >
+    <p>Barde</p>
+    <input pInputText [(ngModel)]="ilvl[13]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/machinist.png')"
+    [ngClass]="{
+      DpsActif: selection == 15,
+      DpsInactif: selection != 15,
+      Job: true,
+      JobDisable: ilvl[14] < ilvlRequis
+    }"
+  >
+    <p>Machiniste</p>
+    <input pInputText [(ngModel)]="ilvl[14]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/dancer.png')"
+    [ngClass]="{
+      DpsActif: selection == 16,
+      DpsInactif: selection != 16,
+      Job: true,
+      JobDisable: ilvl[15] < ilvlRequis
+    }"
+  >
+    <p>Danseur</p>
+    <input pInputText [(ngModel)]="ilvl[15]" />
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/blackmage.png')"
+    [ngClass]="{
+      DpsActif: selection == 17,
+      DpsInactif: selection != 17,
+      Job: true,
+      JobDisable: ilvl[16] < ilvlRequis
+    }"
+  >
+    <p>Mage Noir</p>
+    <input pInputText [(ngModel)]="ilvl[16]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/summoner.png')"
+    [ngClass]="{
+      DpsActif: selection == 18,
+      DpsInactif: selection != 18,
+      Job: true,
+      JobDisable: ilvl[17] < ilvlRequis
+    }"
+  >
+    <p>Invocateur</p>
+    <input pInputText [(ngModel)]="ilvl[17]" />
+  </div>
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/redmage.png')"
+    [ngClass]="{
+      DpsActif: selection == 19,
+      DpsInactif: selection != 19,
+      Job: true,
+      JobDisable: ilvl[18] < ilvlRequis
+    }"
+  >
+    <p>Mage rouge</p>
+    <input pInputText [(ngModel)]="ilvl[18]" />
+  </div>
+
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_dps_magic.png')"
+    [ngClass]="{
+      DpsActif: selection == 21,
+      DpsInactif: selection != 21,
+      Job: true,
+      JobDisable: ilvl[20] < ilvlRequis
+    }"
+  >
+    <p>Pictomancien</p>
+    <input pInputText [(ngModel)]="ilvl[20]" />
+  </div>
+</div>
+
+<div class="grid-container" style="margin-bottom:10px">
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/bluemage.png')"
+    [ngClass]="{
+      JobActif: selection == 20,
+      JobInactif: selection != 20,
+      Job: true,
+      JobDisable: ilvl[19] < ilvlRequis || !LimitedJob
+    }"
+  >
+    <p>Mage bleu</p>
+    <input pInputText [(ngModel)]="ilvl[19]" />
+  </div>
+
+  <div
+    class="grid-item"
+    style="background-image: url('https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_ranged.png')"
+    [ngClass]="{
+      JobActif: selection == 23,
+      JobInactif: selection != 23,
+      Job: true,
+      JobDisable: ilvl[22] < ilvlRequis || !LimitedJob
+    }"
+  >
+    <p>Dresseur</p>
+    <input pInputText [(ngModel)]="ilvl[22]" />
+  </div>
+</div>
+
+<p-dialog
+  header="Alors, la chance ?"
+  [(visible)]="displayBasic"
+  [ngClass]="{
+    TankDiag: DiagCssConditionTank(),
+    HealDiag: DiagCssConditionHeal(),
+    DpsDiag: DiagCssConditionDps(),
+    JobDiag: true
+  }"
+  [baseZIndex]="10000"
+>
+  <ng-container *ngIf="selection == 1">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/paladin.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Paldain</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 2">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/warrior.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Guerrier</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 3">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/darkknight.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Chevalier noir</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 4">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/gunbreaker.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Pistosabreur</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 5">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/whitemage.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Mage blanc</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 6">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/scholar.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Érudit</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 7">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/astrologian.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Astromancien</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 8">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/sage.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Sage</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 9">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/monk.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Moine</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 10">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/dragoon.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Chevalier dragon</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 11">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/ninja.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Ninja</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 12">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/samurai.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Samouraï</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 13">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/reaper.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Faucheur</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 14">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/bard.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Barde</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 15">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/machinist.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Machiniste</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 16">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/dancer.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Danseur</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 17">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/blackmage.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Mage Noir</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 18">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/summoner.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Invocateur</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 19">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/redmage.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Mage rouge</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 20">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/icons/bluemage.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Mage bleu</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 21">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_dps_magic.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Pictomancien</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 22">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_dps.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Rôdeur vipère</p>
+  </ng-container>
+
+  <ng-container *ngIf="selection == 23">
+    <img
+      src="https://raw.githubusercontent.com/xivapi/classjob-icons/master/misc/clear_ranged.png"
+      alt="Description of the image"
+      class="icon-image"
+    />
+    <p>Dresseur</p>
+  </ng-container>
+</p-dialog>
